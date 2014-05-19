@@ -1,31 +1,4 @@
-##Computer playing by itself
-num <- 1000
-for (a in 1:num) {
-  x <- sample(100, 1)
-  num_of_loops <- 300
-  for (i in 1:num_of_loops) {
-    guess <- sample(100,1)
-    if (guess == x) {
-      print("Yes!")
-      print(x)
-      break
-    }
-    
-    if (guess > x) {
-      print("too high!")
-    }
-    
-    
-    if (guess < x) {
-      print("too low!")
-    }
-    guessnumber <- i
-  }
-  numtakes<-mean(guessnumber)
-}
-print(numtakes)
-
-load("C:/Users/Charles/Google Drive/ESM 505/GWCD_data.Rdata")
+GWCD<-read.csv("H:/ESM505/GWCD.csv")
 GWCD<-GWCD[,c(1:15)]
 library(dplyr)
 fam<-unique(GWCD$Family)
@@ -38,7 +11,6 @@ for (i in 1:famcount) {
   
 }
 
-GWCD<-read.csv("H:/ESM505/GWCD.csv")
 hist(GWCD$Wood.carbon.content....mass.basis.)
 hist(GWCD$Wood.carbon.content....mass.basis.,breaks=50)
 library(ggplot2)
