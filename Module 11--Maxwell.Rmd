@@ -1,0 +1,96 @@
+Worldwide Tree Carbon
+========================================================
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+GWCD<-read.csv("H:/ESM505/GWCD.csv")
+require(dplyr)
+require(ggplot2)
+require(gplots)
+require(knitr)
+require(xtable)
+##GWCD %.% filter(Region == "Asia" & Type == "conifer")
+##GWCD %.% arrange(Country, Biome, desc(Wood.carbon.content....mass.basis.))
+##GWCD %.% select(Country, Binomial, Wood.carbon.content....mass.basis.)
+##GWCD %.% summarise(mean_wb = mean(Wood.carbon.content....mass.basis.))
+##meancb <- GWCD %.% group_by(Region) %.% summarise(mean_wb = mean(Wood.carbon.content....mass.basis.))
+##sdcb <- GWCD %.% group_by(Region) %.% summarise(sd_wb = sd(Wood.carbon.content....mass.basis.))
+##secb <- GWCD %.% group_by(Region) %.% summarise(se_wb = (sd(Wood.carbon.content....mass.basis.)/sqrt(length(GWCD$Region))))
+
+```
+
+# Analysis by Region
+## Regional Plot Means with Error Bars
+```{r echo=FALSE}
+region <- factor(GWCD$Region)
+plotmeans(Wood.carbon.content....mass.basis.~region, data=GWCD, xlab="Region", ylab="Carbon Content (%)", main="Mean Plot\nwith 95% CI") 
+```
+
+## ANOVA by Region
+```{r echo=FALSE, results='asis'}
+fit <- aov(Wood.carbon.content....mass.basis. ~ Region, data=GWCD) 
+##plot(fit)
+out<-anova(fit)
+print(xtable(out), type="html")
+```
+
+## WCD by region
+```{r echo=FALSE}
+byregion <- ggplot(GWCD)
+  p1<-byregion+geom_boxplot(aes(x=Region, y=Wood.carbon.content....mass.basis., colour=Region))
+  print(p1)
+```
+
+# Analysis by Biome
+## Anova by Biome
+```{r echo=FALSE, warning=FALSE}
+fit2 <- aov(Wood.carbon.content....mass.basis. ~ Biome, data=GWCD) 
+##plot(fit)
+out2<-anova(fit2)
+##print(out2)
+print(xtable(out2), type="html")
+```
+
+## Biome Plot Means with Error Bars
+```{r echo=FALSE, warning=FALSE}
+biome <- factor(GWCD$Biome)
+plotmeans(Wood.carbon.content....mass.basis.~ biome, data=GWCD, xlab="Biome", ylab="Carbon Content (%)", main="Mean Plot\nwith 95% CI") 
+```
+
+## WCD by Biome
+```{r echo=FALSE}
+bybiome <- ggplot(GWCD)
+  p2<-bybiome+geom_boxplot(aes(x=Biome, y=Wood.carbon.content....mass.basis.))
+  print(p2)
+```
+
+# Analysis by Type
+## Anova by Type
+```{r echo=FALSE, warning=FALSE}
+fit3 <- aov(Wood.carbon.content....mass.basis. ~ Type, data=GWCD) 
+##plot(fit)
+out3<-anova(fit3)
+##print(out2)
+print(xtable(out3), type="html")
+```
+
+## Biome Plot Means with Error Bars
+```{r echo=FALSE, warning=FALSE}
+type <- factor(GWCD$Type)
+plotmeans(Wood.carbon.content....mass.basis.~ type, data=GWCD, xlab="Type", ylab="Carbon Content (%)", main="Mean Plot\nwith 95% CI") 
+```
+
+## WCD by Biome
+```{r echo=FALSE}
+bytype <- ggplot(GWCD)
+  p3<-bytype+geom_boxplot(aes(x=Type, y=Wood.carbon.content....mass.basis.))
+  print(p3)
+```
+
+## Fancy Combinatorial Plots with ggplot2
+```{r echo=FALSE}
+bytype <- ggplot(GWCD)
+p4 <- bytype+geom_boxplot(aes(x=Type, y=Wood.carbon.content....mass.basis., colour=Region))
+  print(p4)
+  p5 <- bytype+geom_boxplot(aes(x=Type, y=Wood.carbon.content....mass.basis., colour=Biome))
+  print(p5)
+```
